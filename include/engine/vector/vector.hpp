@@ -12,9 +12,9 @@ public:
     T y;
 
     Vector2() { }
-    Vector2(const T& a) {x = a, y = a}
-    Vector2(const T& x, const T& y) {this->x = x; this->y = y}
-    Vector2(const Vector2& other) { x = other->x; y = other->y; }
+    Vector2(const T& a) {x = a, y = a;}
+    Vector2(const T& x, const T& y) {this->x = x; this->y = y;}
+    Vector2(const Vector2& other) { x = other.x; y = other.y; }
 
 
     Vector2 operator +(const Vector2& v) const { return Vector2(x + v.x, y + v.y); }

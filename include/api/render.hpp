@@ -6,12 +6,22 @@
 #define PBLOADER_RENDER_HPP
 
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-namespace Render {
+#include <engine/sprite/sprite.hpp>
 
+typedef std::vector<Sprite*> TVectorSprite;
+
+namespace Render {
+    void addSprite(Sprite* sprite);
+    void popSprite();
+    void clear();
+    void render(SDL_Renderer* render);
+
+    TVectorSprite getVectorSprite();
 }
 
 #endif //PBLOADER_RENDER_HPP

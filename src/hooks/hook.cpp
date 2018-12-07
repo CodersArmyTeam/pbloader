@@ -3,6 +3,9 @@
 //
 
 #include <hooks/hook.hpp>
+#include <global.hpp>
+#include <api/render.hpp>
+#include <engine/sprite/sprite.hpp>
 
 MologieDetours::Detour<tCreateWindow> *detour_CreateWindow = NULL;
 MologieDetours::Detour<tRenderPresent> *detour_RenderPresent = NULL;
@@ -13,6 +16,8 @@ MologieDetours::Detour<tRenderCopy> *detour_RenderCopy = NULL;
 MologieDetours::Detour<tMixPlayMusic> *detour_MixPlayMusic = NULL;
 
 //int dog = 0;
+
+Sprite* sprite;
 
 bool Hooks::Init() {
     try {
@@ -32,6 +37,9 @@ bool Hooks::Init() {
 
 
         detour_MixPlayMusic = new MologieDetours::Detour<tMixPlayMusic>("SDL2_mixer.dll", "Mix_PlayMusic", Hooks::Mix_PlayMusic);
+
+        sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
+        //Render::addSprite(sprite);
     } catch(MologieDetours::DetourException& e) {
         return FALSE;
     }
@@ -45,18 +53,26 @@ void Hooks::Clear() {
     delete detour_RenderCopy;
 
     delete detour_MixPlayMusic;
+
+    delete sprite;
 }
 
 
 SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
     SDL_Window* window = detour_CreateWindow->GetOriginalFunction()(title, x, y, w, h, flags);
+    if(gWindow != NULL) {
+        gWindow = window;
+    }
     return window;
 }
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
     //printf("[PBLoader][Hooks] SDL_RenderPresent\n");
 
-
+    if(gRenderer != NULL) {
+        gRenderer = renderer;
+    }
+    //Render::render(renderer);
     return detour_RenderPresent->GetOriginalFunction()(renderer);
 }
 

@@ -6,11 +6,14 @@
 #define PBLOADER_SPRITE_HPP
 
 #include <engine/vector/vector.hpp>
+#include <SDL2/SDL.h>
 
 class Sprite {
 private:
     Vector2f pos;
     Vector2f size;
+
+    SDL_Texture* texture;
 public:
 
     Sprite()
@@ -20,9 +23,12 @@ public:
     Sprite(const Vector2f& pos, const Vector2f& size) 
     : pos(pos), size(size) {};
 
+    ~Sprite();
+
+    // TODO: make definitions
     Sprite operator=(const Sprite& other);
 
-    void Draw();
+    void draw();
 
     Vector2f getPosition() const                        {return pos;}
     Sprite& setPosition(const Vector2f& vec)            {pos = vec;return *this;}
@@ -34,7 +40,7 @@ public:
 
     bool loadTexture(const char* path);
     //Sprite& setTexture(const Texture& texture);
-    //Texture& getTexture();
+    SDL_Texture* getTexture() { return texture; }
 };
 
 #endif //PBLOADER_SPRITE_HPP
