@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <cmath>
 #include <fcntl.h>
+#include <stdint.h>
+
 namespace Internal {
 	HWND GetHWND();
 	void OpenConsole();
