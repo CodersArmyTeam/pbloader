@@ -16,7 +16,7 @@ MologieDetours::Detour<tIMGLoadRW> *detour_IMGLoadRW = NULL;
 MologieDetours::Detour<tCreateTextureFromSurface> *detour_CreateTextureFromSurface = NULL;
 MologieDetours::Detour<tUpdateTexture> *detour_UpdateTexture = NULL;
 
-//int dog = 0;
+int dog = 0;
 
 SDL_Surface* gSurface = NULL;
 
@@ -41,7 +41,7 @@ bool Hooks::Init() {
 
         detour_MixPlayMusic = new MologieDetours::Detour<tMixPlayMusic>("SDL2_mixer.dll", "Mix_PlayMusic", Hooks::Mix_PlayMusic);
 
-        //detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
+        detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
 
         detour_CreateTextureFromSurface = new MologieDetours::Detour<tCreateTextureFromSurface>("SDL2.dll", "SDL_CreateTextureFromSurface", Hooks::SDL_CreateTextureFromSurface);
 
@@ -125,12 +125,15 @@ int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const v
     return returned_value;
 }
 
-/* Not work, fuck it */
 SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
-    //SDL_Surface* surface =
-    printf("IMG_Load_RW");
-    return NULL;
-    //return detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
+    /*
+    printf("[PBLoader][Hooks] IMG_Load_RW\n");
+    SDL_Surface* surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
+    std::string name = "GRAPH/" + std::to_string(dog) + ".bmp";
+    SDL_SaveBMP(surface, name.c_str());
+    dog += 1;
+    */
+    return detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
 }
 
 
