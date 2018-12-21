@@ -18,6 +18,7 @@ bool Sprite::loadTexture(const char *path) {
     if(surface == NULL) {
         return 1;
     }
+
     texture = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_ARGB8888, NULL);
     return 0;
 }

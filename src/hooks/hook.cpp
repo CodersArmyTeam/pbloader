@@ -20,6 +20,10 @@ SDL_Surface* gSurface = NULL;
 
 Sprite* sprite;
 
+SDL_Surface* gSurface = NULL;
+
+//Sprite* sprite;
+
 bool Hooks::Init() {
     try {
         detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>("SDL2.dll", "SDL_CreateWindow",

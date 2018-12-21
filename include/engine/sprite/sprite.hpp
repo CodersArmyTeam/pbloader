@@ -40,6 +40,7 @@ public:
 
     bool loadTexture(const char* path);
     //Sprite& setTexture(const Texture& texture);
+
     SDL_Surface* getTexture() { return texture; }
 };
 
