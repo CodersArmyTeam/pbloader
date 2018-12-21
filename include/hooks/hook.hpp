@@ -9,19 +9,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <api/render.hpp>
 
-typedef SDL_Window *(*tCreateWindow)(const char *, int, int, int, int, Uint32); /* Maybe remove it later */
-typedef int (*tRenderPresent)(SDL_Renderer*);
-typedef int (*tRenderCopy)(SDL_Renderer*, SDL_Texture*, const SDL_Rect*, const SDL_Rect*);
-
-typedef int (*tUpperBlit)(SDL_Surface*, const SDL_Rect*, SDL_Surface*, SDL_Rect*);
-typedef int (*tUpperBlitScaled)(SDL_Surface*, const SDL_Rect*, SDL_Surface*, SDL_Rect*);
-typedef SDL_Texture* (*tCreateTextureFromSurface)(SDL_Renderer*, SDL_Surface*); /* Remove it later */
-typedef int (*tUpdateTexture)(SDL_Texture*, const SDL_Rect*, const void*, int);
-
-typedef SDL_Surface* (*tIMGLoadRW)(SDL_RWops*, int);
-
-typedef int (*tMixPlayMusic)(Mix_Music*, int);
+#include "typedefs.hpp"
 
 namespace Hooks {
     bool Init();
@@ -35,7 +25,6 @@ namespace Hooks {
     int SDL_UpperBlit(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect);
     int SDL_UpperBlitScaled(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect);
 
-    SDL_Texture* SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
     int SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const void* pixels, int pitch);
 
     /* SDL_image */

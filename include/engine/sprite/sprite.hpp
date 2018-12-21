@@ -13,7 +13,7 @@ private:
     Vector2f pos;
     Vector2f size;
 
-    SDL_Texture* texture;
+    SDL_Surface* texture;
 public:
 
     Sprite()
@@ -40,7 +40,7 @@ public:
 
     bool loadTexture(const char* path);
     //Sprite& setTexture(const Texture& texture);
-    SDL_Texture* getTexture() { return texture; }
+    SDL_Surface* getTexture() { return texture; }
 };
 
 #endif //PBLOADER_SPRITE_HPP

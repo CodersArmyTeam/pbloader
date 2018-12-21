@@ -12,6 +12,8 @@
 #include <SDL2/SDL_image.h>
 
 #include <engine/sprite/sprite.hpp>
+#include <detours/detours.h>
+#include <hooks/typedefs.hpp>
 
 typedef std::vector<Sprite*> TVectorSprite;
 
@@ -19,9 +21,7 @@ namespace Render {
     void addSprite(Sprite* sprite);
     void popSprite();
     void clear();
-    void render(SDL_Renderer* render);
-
-    TVectorSprite getVectorSprite();
+    void render(MologieDetours::Detour<tUpdateTexture>* detour_UpdateTexture, SDL_Texture* texture);
 }
 
 #endif //PBLOADER_RENDER_HPP

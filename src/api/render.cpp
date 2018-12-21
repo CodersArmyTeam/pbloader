@@ -6,24 +6,25 @@
 
 TVectorSprite sprites;
 
-void addSprite(Sprite* sprite) {
+void Render::addSprite(Sprite* sprite) {
     sprites.push_back(sprite);
 }
 
-void popSprite() {
+void Render::popSprite() {
     sprites.pop_back();
 }
 
-void clear() {
+void Render::clear() {
     sprites.clear();
 }
 
-void render(SDL_Renderer* render) {
+void Render::render(MologieDetours::Detour<tUpdateTexture>* detour_UpdateTexture, SDL_Texture* texture) {
     for(int i = 0; i<sprites.size(); i++) {
-        SDL_RenderCopy(render, sprites[i]->getTexture(), NULL, NULL);
+        SDL_Rect rect;
+        rect.x = sprites[i]->getPosition().x;
+        rect.y = sprites[i]->getPosition().y;
+        rect.w = sprites[i]->getSize().x;
+        rect.h = sprites[i]->getSize().y;
+        detour_UpdateTexture->GetOriginalFunction()(texture, &rect, sprites[i]->getTexture()->pixels, sprites[i]->getTexture()->pitch);
     }
-}
-
-TVectorSprite* getVectorSprite() {
-    return &sprites;
 }

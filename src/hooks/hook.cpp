@@ -3,7 +3,6 @@
 //
 
 #include <hooks/hook.hpp>
-#include <api/render.hpp>
 #include <engine/sprite/sprite.hpp>
 
 MologieDetours::Detour<tCreateWindow> *detour_CreateWindow = NULL;
@@ -13,14 +12,13 @@ MologieDetours::Detour<tUpperBlitScaled> *detour_UpperBlitScaled = NULL;
 MologieDetours::Detour<tRenderCopy> *detour_RenderCopy = NULL;
 MologieDetours::Detour<tMixPlayMusic> *detour_MixPlayMusic = NULL;
 MologieDetours::Detour<tIMGLoadRW> *detour_IMGLoadRW = NULL;
-MologieDetours::Detour<tCreateTextureFromSurface> *detour_CreateTextureFromSurface = NULL;
 MologieDetours::Detour<tUpdateTexture> *detour_UpdateTexture = NULL;
 
 int dog = 0;
 
 SDL_Surface* gSurface = NULL;
 
-//Sprite* sprite;
+Sprite* sprite;
 
 bool Hooks::Init() {
     try {
@@ -43,11 +41,11 @@ bool Hooks::Init() {
 
         detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
 
-        detour_CreateTextureFromSurface = new MologieDetours::Detour<tCreateTextureFromSurface>("SDL2.dll", "SDL_CreateTextureFromSurface", Hooks::SDL_CreateTextureFromSurface);
-
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
-        //sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
-        //Render::addSprite(sprite);
+
+        sprite = new Sprite(Vector2f(0, 0), Vector2f(32, 32));
+        sprite->loadTexture("dog.png");
+        Render::addSprite(sprite);
     } catch(MologieDetours::DetourException& e) {
         printf("%s", e.what());
         return FALSE;
@@ -62,9 +60,9 @@ void Hooks::Clear() {
     delete detour_RenderCopy;
     delete detour_IMGLoadRW;
     delete detour_MixPlayMusic;
-    delete detour_CreateTextureFromSurface;
+    delete detour_UpdateTexture;
 
-    //delete sprite;
+    delete sprite;
 }
 
 
@@ -95,7 +93,7 @@ int Hooks::SDL_UpperBlit(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface*
 }
 
 int Hooks::SDL_UpperBlitScaled(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect) {
-    printf("[PBLoader][Hooks] SDL_BlitScaled\n");
+    //printf("[PBLoader][Hooks] SDL_BlitScaled\n");
     return detour_UpperBlitScaled->GetOriginalFunction()(src, srcrect, dst, dstrect);
 }
 
@@ -105,23 +103,10 @@ int Hooks::SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const SD
     return detour_RenderCopy->GetOriginalFunction()(renderer, texture, srcrect, dstrect);
 }
 
-SDL_Texture* Hooks::SDL_CreateTextureFromSurface(SDL_Renderer* renderer, SDL_Surface* surface) {
-    printf("[PBLoader][Hooks] SDL_CreateTextureFromSurface");
-    return detour_CreateTextureFromSurface->GetOriginalFunction()(renderer, surface);
-}
-
 int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const void* pixels, int pitch) {
     printf("[PBLoader][Hooks] SDL_UpdateTexture\n");
     int returned_value = detour_UpdateTexture->GetOriginalFunction()(texture, rect, pixels, pitch);
-    SDL_Rect dogg;
-    dogg.x = 0;
-    dogg.y = 0;
-    dogg.w = 32;
-    dogg.h = 32;
-    Uint32 * dog = new Uint32[32 * 32];
-    memset(dog, 255, 32 * 32 * sizeof(Uint32));
-    detour_UpdateTexture->GetOriginalFunction()(texture, &dogg, dog, 32 * sizeof(Uint32));
-    //delete[] pixels; <- crash
+    Render::render(detour_UpdateTexture, texture);
     return returned_value;
 }
 

@@ -15,22 +15,21 @@ bool quit;
 
 BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID reserved) {
     switch(reason) {
-		case DLL_PROCESS_ATTACH:
-		        Internal::OpenConsole();
-		        if(!Hooks::Init()) {
-					return FALSE;
-		        }
+        case DLL_PROCESS_ATTACH:
 			    thread = CreateThread(NULL, 0, &Main, &quit, 0, NULL);
 			break;
 		case DLL_PROCESS_DETACH:
-		    Hooks::Clear();
-		    Internal::CloseConsole();
+            Hooks::Clear();
+            Internal::CloseConsole();
 			break;
 	}
 	return TRUE;
 }
 
 DWORD WINAPI Main(LPVOID) {
-    
+    Internal::OpenConsole();
+    if(!Hooks::Init()) {
+        return FALSE;
+    }
     return 0;
 }

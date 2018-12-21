@@ -9,7 +9,7 @@
 #include <SDL2/SDL_image.h>
 
 Sprite::~Sprite() {
-    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(texture);
     texture = NULL;
 }
 
@@ -18,10 +18,6 @@ bool Sprite::loadTexture(const char *path) {
     if(surface == NULL) {
         return 1;
     }
-
-    //texture = SDL_CreateTextureFromSurface(gRenderer, surface);
-    if(texture == NULL) {
-        return 1;
-    }
-    SDL_FreeSurface(surface);
+    texture = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_ARGB8888, NULL);
+    return 0;
 }
