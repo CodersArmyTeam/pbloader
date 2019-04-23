@@ -13,7 +13,10 @@ public:
     Location();
 
     ~Location();
-
+    
+    /**
+     *  Sets the block type in the array
+     */
     void SetObstacle(int x, int y, Obstacle* obstacle);
 };
 

@@ -23,21 +23,19 @@ void API::SetYLoc(int val) {
 ////////////////////////////////////////////////////////////////////////////////
 
 float API::GetXPos() {
-	Vector2f vec = Player::getPosition();
-	return floor(vec.x);
+	return 0;
 }
 
 float API::GetYPos() {
-	Vector2f vec = Player::getPosition();
-	return floor(vec.y);
+	return 0;
 }
 
 void API::SetXPos(float val) {
-	Player::move(val, 0);
+	
 }
 
 void API::SetYPos(float val) {
-	Player::move(0, val);
+	
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -55,11 +53,11 @@ void API::Respawn() {
 ////////////////////////////////////////////////////////////////////////////////
 
 int API::GetDeathCount() {
-	return Player::getDeathCount();
+	return 0;
 }
 
 void API::SetDeathCount(int val) {
-	Player::setDeathCount(val);
+	
 }
 
 ////////////////////////////////////////////////////////////////////////////////

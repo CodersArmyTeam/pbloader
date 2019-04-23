@@ -1,9 +1,11 @@
-//
-// Created by devildefu on 01.12.2018.
-//
+/**
+ *  hook.hpp by devildefu 2019
+ */
 
 #ifndef PBLOADER_HOOK_HPP
 #define PBLOADER_HOOK_HPP
+
+#include <fstream>
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
@@ -35,9 +37,7 @@ namespace Hooks {
     /* SDL_ttf */
     TTF_Font* TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize);
 
-    FILE* fopen(const char* filename, const char* mode);
-
-    void aha();
+    SDL_RWops* SDL_RWFromMem(void* mem, int size);
 }
 
 #endif //PBLOADER_HOOK_HPP

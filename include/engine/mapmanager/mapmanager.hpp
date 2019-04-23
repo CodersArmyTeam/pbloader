@@ -12,11 +12,15 @@ public:
     MapManager() { }
     ~MapManager() { }
 
+    /**
+     *  Return location X
+     */
     int GetLocationX() { return *location_x; }
-    int GetlocationY() { return *location_y; }
 
-    /* Update last_location_x and last_location_y */
-    void Refresh();
+    /**
+     *  Return location Y
+     */
+    int GetlocationY() { return *location_y; }
 };
 
 #endif

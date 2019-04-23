@@ -14,8 +14,6 @@
 #include <engine/datamanager/datamanager.hpp>
 #include <engine/player/player.hpp>
 
-extern MologieDetours::Detour<taha> *detour_aha;
-
 class GameManager {
 private:
     GameManager() { }

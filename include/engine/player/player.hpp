@@ -5,22 +5,16 @@
 
 #include <engine/vector/vector.hpp>
 
-#define Player_posX       ((float*)0x005411E0)
-#define Player_posY       ((float*)0x005411E0)
-#define Player_deathCount ((int*)0x005410F8)
+class Player {
+private:
+    float* pos_x = (float*)0x005411E0;
+    float* pos_y = (float*)0x005411E4;
+    int* death_count = (int*)0x005410F8;
+public:
+    Player() { }
+    ~Player() { }
 
-namespace Player {
-
-    Vector2f getPosition();
-
-    void setPosition(float x, float y);
-    void setPosition(const Vector2f& vec);
-
-    void move(float x, float y);
-
-    int getDeathCount();
-    void setDeathCount(int count);
-
-}
+    /* TODO: Implement functions */
+};
 
 #endif //PBLOADER_PLAYER_HPP

@@ -1,36 +1,41 @@
-//
-// Created by devildefu on 01.12.2018.
-//
+/**
+ *  hook.cpp by devildefu 2019
+ */
+
+/* TODO: Create HookManager */
 
 #include <logger.hpp>
 #include <hooks/hook.hpp>
 #include <engine/sprite/sprite.hpp>
 
-MologieDetours::Detour<tCreateWindow> *detour_CreateWindow = NULL;
-MologieDetours::Detour<tRenderPresent> *detour_RenderPresent = NULL;
-MologieDetours::Detour<tUpperBlit> *detour_UpperBlit = NULL;
-MologieDetours::Detour<tUpperBlitScaled> *detour_UpperBlitScaled = NULL;
-MologieDetours::Detour<tRenderCopy> *detour_RenderCopy = NULL;
-MologieDetours::Detour<tUpdateTexture> *detour_UpdateTexture = NULL;
+MologieDetours::Detour<tCreateWindow>* detour_CreateWindow = NULL;
+MologieDetours::Detour<tRenderPresent>* detour_RenderPresent = NULL;
+MologieDetours::Detour<tUpperBlit>* detour_UpperBlit = NULL;
+MologieDetours::Detour<tUpperBlitScaled>* detour_UpperBlitScaled = NULL;
+MologieDetours::Detour<tRenderCopy>* detour_RenderCopy = NULL;
+MologieDetours::Detour<tUpdateTexture>* detour_UpdateTexture = NULL;
+MologieDetours::Detour<tRWFromMem>* detour_RWFromMem = NULL;
 
-MologieDetours::Detour<tIMGLoadRW> *detour_IMGLoadRW = NULL;
+MologieDetours::Detour<tIMGLoadRW>* detour_IMGLoadRW = NULL;
 
-MologieDetours::Detour<tMixPlayMusic> *detour_MixPlayMusic = NULL;
+MologieDetours::Detour<tMixPlayMusic>* detour_MixPlayMusic = NULL;
 
-MologieDetours::Detour<tTTFOpenFontRW> *detour_OpenFontRW = NULL;
-
-MologieDetours::Detour<tfopen> *detour_fopen = NULL;
-
-MologieDetours::Detour<taha> *detour_aha = NULL;
+MologieDetours::Detour<tTTFOpenFontRW>* detour_OpenFontRW = NULL;
 
 int dog = 0;
 
 auto surfacemanager = GameManager::GetSurfaceManager();
 
+/**
+ * 
+ * Initializes all hooks
+ * 
+ */
+
 bool Hooks::Init() {
     try {
-        detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>(/*"SDL2.dll", "SDL_CreateWindow",
-                                                                        Hooks::SDL_CreateWindow*/(tCreateWindow)0x0045DB78, Hooks::SDL_CreateWindow);
+        detour_CreateWindow = new MologieDetours::Detour<tCreateWindow>("SDL2.dll", "SDL_CreateWindow",
+                                                                        Hooks::SDL_CreateWindow);
 
         detour_RenderPresent = new MologieDetours::Detour<tRenderPresent>("SDL2.dll", "SDL_RenderPresent",
                                                                           Hooks::SDL_RenderPresent);
@@ -49,18 +54,17 @@ bool Hooks::Init() {
         detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
 
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
-
-        detour_fopen = new MologieDetours::Detour<tfopen>("msvcrt.dll", "fopen", Hooks::fopen);
-
-        /* Kiedy zaczniesz grać, ta funkcja jest ciągle używana, możliwe że to operator= lub konstruktor, ale czego? */
-        //detour_aha = new MologieDetours::Detour<taha>((taha)0x004038d0, Hooks::aha);
-
-        detour_aha = new MologieDetours::Detour<taha>((taha)0x00427280, Hooks::aha);
     } catch(MologieDetours::DetourException& e) {
         logError("%s", e.what());
         return FALSE;
     }
 }
+
+/**
+ *  
+ * Removes hooks from memory
+ *  
+ */
 
 void Hooks::Clear() {
     delete detour_CreateWindow;
@@ -71,7 +75,12 @@ void Hooks::Clear() {
     delete detour_IMGLoadRW;
     delete detour_MixPlayMusic;
     delete detour_UpdateTexture;
-    delete detour_fopen;
+}
+
+SDL_RWops* Hooks::SDL_RWFromMem(void* mem, int size) {
+    logInfo("Hooks::SDL_RWFromMemory is used!");
+    SDL_RWops* rw = detour_RWFromMem->GetOriginalFunction()(mem, size);
+    return rw;
 }
 
 SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) {
@@ -136,16 +145,3 @@ TTF_Font* Hooks::TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize) {
     return font;
 }
 
-
-FILE* Hooks::fopen(const char* filename, const char* mode) {
-    FILE* file = detour_fopen->GetOriginalFunction()(filename, mode);
-    std::cout << filename << " " << file << std::endl;
-    return file;
-}
-
-
-void Hooks::aha() {
-    logInfo("Hooks::aha is used!");
-    detour_aha->GetOriginalFunction()();
-    return;
-}

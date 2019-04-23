@@ -1,6 +1,6 @@
-//
-// Created by devildefu on 21.12.2018.
-//
+/**
+ *  typedefs.hpp by devildefu 2019
+ */
 
 #ifndef PBLOADER_TYPEDEFS_HPP
 #define PBLOADER_TYPEDEFS_HPP
@@ -11,6 +11,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+
+#include <ghidra.h>
 
 typedef SDL_Window *(*tCreateWindow)(const char *, int, int, int, int, Uint32); /* Maybe remove it later */
 typedef int (*tRenderPresent)(SDL_Renderer*);
@@ -26,8 +28,6 @@ typedef int (*tMixPlayMusic)(Mix_Music*, int);
 
 typedef TTF_Font* (*tTTFOpenFontRW)(SDL_RWops*, int, int);
 
-typedef FILE* (*tfopen)(const char*, const char*);
-
-typedef void (*taha)();
+typedef SDL_RWops* (*tRWFromMem)(void*, int);
 
 #endif //PBLOADER_TYPEDEFS_HPP

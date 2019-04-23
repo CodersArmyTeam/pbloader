@@ -1,7 +1,8 @@
 #ifndef BLOCKS_HPP
 #define BLOCKS_HPP
 
-//TODO: dać jeszcze facing
+// TODO: dać jeszcze facing
+// TODO: find other blocks
 
 // NOx - Nothing X
 
