@@ -38,6 +38,8 @@ namespace Hooks {
     TTF_Font* TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize);
 
     SDL_RWops* SDL_RWFromMem(void* mem, int size);
+
+    void __thiscall location_is_changed(void* oh, unsigned int param_1);
 }
 
 #endif //PBLOADER_HOOK_HPP

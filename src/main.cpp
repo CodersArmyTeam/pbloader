@@ -29,11 +29,14 @@ BOOL WINAPI DllMain(HINSTANCE hInst, DWORD reason, LPVOID reserved) {
 }
 
 DWORD WINAPI Main(LPVOID) {
-    Internal::OpenConsole();
-    Hooks::Init();
-
+    /*
     logInfo("TEST: info",1);
     logError("TEST: err",2);
     logWarn("TEST: warn",3);
+    */
+
+    Internal::OpenConsole();
+    Hooks::Init();
+    GameManager::Init();
     return 0;
 }

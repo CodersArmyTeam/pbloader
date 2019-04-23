@@ -8,7 +8,7 @@ private:
     /** 
      *  If obstacle is custom, id must be -1 (may change) 
      */
-    int id = -1;
+    uint16_t id = -1;
 
     /** 
      *  It doesn't have to be set if obstacle is built into the game.
@@ -25,6 +25,13 @@ public:
         this->texture = obstacle.getTexture();
     }
 
+    /**
+     *  Create obstacle from id
+     */
+    Obstacle(uint16_t id) {
+        this->id = id;
+    }
+
     ~Obstacle() { 
         if(texture)
             SDL_FreeSurface(texture);
@@ -33,7 +40,7 @@ public:
     /**
      *  Return obstacle's id
      */
-    inline int getId() { return id; }
+    inline uint16_t getId() { return id; }
 
     /**
      *  Return obstacle's texture

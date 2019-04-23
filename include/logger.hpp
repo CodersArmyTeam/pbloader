@@ -40,3 +40,6 @@ static void _logger_raw(const T& arg, const T2& ... args) {
     std::cout << arg << ' ';
 	_logger_raw(args...);
 }
+
+#define UNIMPLEMENTED logWarn(__FUNCTION__ + " stub, but is unimplemented!");
+#define UNIMPLEMENTED_PART logWarn("This part of code is unimplemented! FIX IT!");

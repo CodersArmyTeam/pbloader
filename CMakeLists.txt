@@ -19,7 +19,8 @@ add_library(pbloader SHARED ${source}/main.cpp
                             ${source}/engine/sprite/sprite.cpp
                             ${source}/engine/player/player.cpp
                             ${source}/engine/mapmanager/location.cpp
-                            ${source}/engine/gamemanager/gamemanager.cpp)
+                            ${source}/engine/gamemanager/gamemanager.cpp
+                            ${source}/engine/mapmanager/mapmanager.cpp)
 
 IF(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")

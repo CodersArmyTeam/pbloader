@@ -30,4 +30,6 @@ typedef TTF_Font* (*tTTFOpenFontRW)(SDL_RWops*, int, int);
 
 typedef SDL_RWops* (*tRWFromMem)(void*, int);
 
+typedef void __thiscall (*tlocation_is_changed)(void*, unsigned int);
+
 #endif //PBLOADER_TYPEDEFS_HPP

@@ -25,50 +25,32 @@ public:
 
     Vector2& operator =(const Vector2& v) { x = v.x; y = v.y; return *this; }
 
-    Vector2& operator +=(const Vector2& v) { x += v.x; y += v.y; return *this; }
-    Vector2& operator -=(const Vector2& v) { x -= v.x; y -= v.y; return *this; }
-    Vector2& operator *=(const Vector2& v) { x *= v.x; y *= v.y; return *this; }
-    Vector2& operator /=(const Vector2& v) { x /= v.x; y /= v.y; return *this; }
+    Vector2& operator +=(const Vector2& v) {return (*this = *this + v);}
+    Vector2& operator -=(const Vector2& v) {return (*this = *this + v);}
+    Vector2& operator *=(const Vector2& v) {return (*this = *this + v);}
+    Vector2& operator /=(const Vector2& v) {return (*this = *this + v);}
 
     bool operator ==(const Vector2& v) const {
-        if(x == v.x && y == v.y)
-            return true;
-        else
-            return false;
+        return (x == v.x && y == v.y);
     }
     bool operator !=(const Vector2& v) const {
-        if(x != v.x && y != v.y)
-            return true;
-        else
-            return false;
+        return (x != v.x && y != v.y);
     }
 
 
     bool operator <(const Vector2& v) const{
-        if(x < v.x && y < v.y)
-            return true;
-        else
-            return false;
+        return (x < v.x && y < v.y);
     }
     bool operator >(const Vector2& v) const {
-        if(x > v.x && y > v.y)
-            return true;
-        else
-            return false;
+        return(x > v.x && y > v.y);
     }
 
 
     bool operator <=(const Vector2& v) const {
-        if(x <= v.x && y <= v.y)
-            return true;
-        else
-            return false;
+        return (x <= v.x && y <= v.y);
     }
     bool operator >=(const Vector2& v) const {
-        if(x >= v.x && y >= v.y)
-            return true;
-        else
-            return false;
+        return (x >= v.x && y >= v.y);
     }
 };
 

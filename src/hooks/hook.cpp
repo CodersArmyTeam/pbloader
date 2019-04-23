@@ -21,10 +21,12 @@ MologieDetours::Detour<tIMGLoadRW>* detour_IMGLoadRW = NULL;
 MologieDetours::Detour<tMixPlayMusic>* detour_MixPlayMusic = NULL;
 
 MologieDetours::Detour<tTTFOpenFontRW>* detour_OpenFontRW = NULL;
+MologieDetours::Detour<tlocation_is_changed>* detour_location_is_changed = NULL;
 
 int dog = 0;
 
 auto surfacemanager = GameManager::GetSurfaceManager();
+auto mapmanager = GameManager::GetMapManager();
 
 /**
  * 
@@ -54,6 +56,8 @@ bool Hooks::Init() {
         detour_IMGLoadRW = new MologieDetours::Detour<tIMGLoadRW>("SDL2_image.dll", "IMG_Load_RW", Hooks::IMG_Load_RW);
 
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
+
+        detour_location_is_changed = new MologieDetours::Detour<tlocation_is_changed>((tlocation_is_changed)0x00403960, Hooks::location_is_changed);
     } catch(MologieDetours::DetourException& e) {
         logError("%s", e.what());
         return FALSE;
@@ -145,3 +149,8 @@ TTF_Font* Hooks::TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize) {
     return font;
 }
 
+void Hooks::location_is_changed(void* oh, unsigned int param_1) {
+    detour_location_is_changed->GetOriginalFunction()(oh, param_1);
+    mapmanager->ModifyLocation();
+    return;
+}

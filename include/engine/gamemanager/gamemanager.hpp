@@ -13,18 +13,22 @@
 
 #include <engine/datamanager/datamanager.hpp>
 #include <engine/player/player.hpp>
+#include <engine/mapmanager/mapmanager.hpp>
 
 class GameManager {
 private:
     GameManager() { }
 public:
     static SurfaceManager* surfacemanager;
+    static MapManager* mapmanager;
 
     static void Init();
     static void HandleEvents();
     static void Render();
+    static void End();
 
     static SurfaceManager* GetSurfaceManager() { return surfacemanager; }
+    static MapManager* GetMapManager() { return mapmanager; }
 };
 
 #endif
