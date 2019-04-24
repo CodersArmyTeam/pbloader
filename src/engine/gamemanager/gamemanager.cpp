@@ -9,7 +9,7 @@ Location* location = new Location;
 void GameManager::Init() {
     eeee = IMG_Load("auuu.png");
 
-    location->SetObstacle(31, 17, new Obstacle(1));
+    location->SetObstacle(8, 15, new Obstacle(1, true, true));
     mapmanager->AddLocationToArray(9, 8, location);
 }
 

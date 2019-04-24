@@ -14,9 +14,18 @@
 #define MAP_WIDTH  32
 #define MAP_HEIGHT 18
 
+#define COLLISION_START 0x00541B80
+#define COLLISION_END   0x00541DBF
+
+#define SHADOWS_START 0x00541280
+#define SHADOWS_END   0x005414BF
+
 class Location {
 private:
     Obstacle* obstacles[MAP_WIDTH * MAP_HEIGHT - 1];
+
+    void SetCollision(int x, int y, bool state);
+    void SetShadow(int x, int y, bool state);
 public:
     Location();
 

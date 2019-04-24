@@ -26,20 +26,43 @@ void Location::SetObstacle(int x, int y, Obstacle* obstacle) {
     }
 }
 
+void Location::SetCollision(int x, int y, bool state) {
+    bool* ptr = (bool*)COLLISION_START;
+
+	for(int i = 0; i < x * MAP_HEIGHT + y; i++) {
+		ptr += 0x00000001;
+	}
+
+	*ptr = state;
+}
+
+void Location::SetShadow(int x, int y, bool state)  {
+    bool* ptr = (bool*)SHADOWS_START;
+
+	for(int i = 0; i < x * MAP_HEIGHT + y; i++) {
+		ptr += 0x00000001;
+	}
+
+	*ptr = state;
+}
+
 void Location::PlaceObstacle(int x, int y, Obstacle* obstacle) {
     if(!obstacle) {
         logWarn("Trying to place undefined obstacle! Aborting...");
         return;
     }
     
-    if(obstacle->getId() > -1) {
+    if(obstacle->GetId() > -1) {
         uint16_t* ptr = (uint16_t*)MAP_START;
 
 	    for(int i = 0; i < x * MAP_HEIGHT + y; i++) {
 		    ptr += 0x00000001;
 	    }
 
-	    *ptr = obstacle->getId();
+	    *ptr = obstacle->GetId();
+
+        SetCollision(x, y, obstacle->GetCollisionState());
+        SetShadow(x, y, obstacle->GetShadowState());
     } else {
         UNIMPLEMENTED_PART
     }

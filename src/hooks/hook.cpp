@@ -122,6 +122,7 @@ int Hooks::SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const SD
 
 int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const void* pixels, int pitch) {
     //logInfo("[Hooks] SDL_UpdateTexture"); //if your app fuck up here put dog.png next to pb
+    std::cout << texture << std::endl;
     int returned_value = detour_UpdateTexture->GetOriginalFunction()(texture, rect, pixels, pitch);
     Render::render(detour_UpdateTexture, texture);
     return returned_value;
