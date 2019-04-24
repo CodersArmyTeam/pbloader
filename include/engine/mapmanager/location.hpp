@@ -3,11 +3,12 @@
 
 #include <algorithm>
 #include <iterator>
+#include <vector>
 
 #include <engine/mapmanager/obstacle.hpp>
-#include <logger.hpp>
 
-#include <api/api.hpp>
+#include <hooks/typedefs.hpp>
+#include <logger.hpp>
 
 #define MAP_START 0x00541DC0
 #define MAP_END   0x0054223E
@@ -20,9 +21,14 @@
 #define SHADOWS_START 0x00541280
 #define SHADOWS_END   0x005414BF
 
+#define BLOCK_RESOLUTION 10
+
 class Location {
 private:
     Obstacle* obstacles[MAP_WIDTH * MAP_HEIGHT - 1];
+    std::vector<Obstacle*> custom_obstacles;
+
+    bool render = false;
 
     void SetCollision(int x, int y, bool state);
     void SetShadow(int x, int y, bool state);
@@ -42,6 +48,10 @@ public:
      *  Modify current location
      */
     void Run();
+
+    void Update();
+
+    void SetRenderState(bool state) { render = state; }
 };
 
 #endif

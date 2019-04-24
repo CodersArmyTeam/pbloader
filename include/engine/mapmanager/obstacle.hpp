@@ -3,12 +3,14 @@
 
 #include <SDL2/SDL.h>
 
+#include <engine/vector/vector.hpp>
+
 class Obstacle {
 private:
     /** 
      *  If obstacle is custom, id must be -1 (may change) 
      */
-    uint16_t id = -1;
+    int id = -1;
 
     /** 
      *  It doesn't have to be set if obstacle is built into the game.
@@ -17,6 +19,9 @@ private:
 
     bool collision = false;
     bool shadow = false;
+
+    int x;
+    int y;
 public:
     Obstacle() { }
 
@@ -31,7 +36,7 @@ public:
     /**
      *  Create obstacle from id, collision state and shadow state
      */
-    Obstacle(uint16_t id, bool collision = false, bool shadow = false) {
+    Obstacle(int id, bool collision = false, bool shadow = false) {
         this->id = id;
         this->collision = collision;
         this->shadow = shadow;
@@ -41,9 +46,10 @@ public:
      *  Create custom obstacle
      */
     Obstacle(SDL_Surface* texture, bool collision = false, bool shadow = false) {
-        this->texture = texture;
+        this->texture = SDL_ConvertSurfaceFormat(texture, SDL_PIXELFORMAT_ARGB8888, NULL);
         this->collision = collision;
         this->shadow = shadow;
+        this->id = -1;
     }
 
     ~Obstacle() { 
@@ -54,7 +60,7 @@ public:
     /**
      *  Return obstacle's id
      */
-    inline uint16_t GetId() { return id; }
+    inline int GetId() { return id; }
 
     /**
      *  Return obstacle's texture
@@ -70,6 +76,16 @@ public:
      *  Return obstacle's shadow state
      */
     inline bool GetShadowState() { return shadow; }
+
+    inline void SetPosition(const Vector2f& pos) { x = pos.x; y = pos.y; }
+    inline void SetPosition(int x, int y) { this->x = x; this->y = y; }
+
+    inline Vector2f GetPosition() {
+        Vector2f vec;
+        vec.x = x;
+        vec.y = y;
+        return vec;
+    }
 };
 
 #endif

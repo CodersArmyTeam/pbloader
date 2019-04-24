@@ -13,6 +13,9 @@ private:
     int* const location_y = (int*)0x00541114;
     
     Location* locations[MAXIMUM_LOCATIONS][MAXIMUM_LOCATIONS];
+
+    int last_location_x;
+    int last_location_y;
 public:
     MapManager() { }
     ~MapManager() { }
@@ -25,7 +28,7 @@ public:
     /**
      *  Return location Y
      */
-    int GetlocationY() { return *location_y; }
+    int GetLocationY() { return *location_y; }
 
     /**
      *  Set location X and location Y
@@ -60,6 +63,8 @@ public:
      *  
      */
     void ModifyLocation();
+
+    void UpdateLocation();
 };
 
 #endif

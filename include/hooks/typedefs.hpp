@@ -14,6 +14,8 @@
 
 #include <ghidra.h>
 
+#include <detours/detours.h>
+
 typedef SDL_Window *(*tCreateWindow)(const char *, int, int, int, int, Uint32); /* Maybe remove it later */
 typedef int (*tRenderPresent)(SDL_Renderer*);
 typedef int (*tRenderCopy)(SDL_Renderer*, SDL_Texture*, const SDL_Rect*, const SDL_Rect*);
@@ -31,5 +33,7 @@ typedef TTF_Font* (*tTTFOpenFontRW)(SDL_RWops*, int, int);
 typedef SDL_RWops* (*tRWFromMem)(void*, int);
 
 typedef void __thiscall (*tlocation_is_changed)(void*, unsigned int);
+
+using UpdateTextureHook = MologieDetours::Detour<tUpdateTexture>;
 
 #endif //PBLOADER_TYPEDEFS_HPP

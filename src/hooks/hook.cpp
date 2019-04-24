@@ -28,6 +28,8 @@ int dog = 0;
 auto surfacemanager = GameManager::GetSurfaceManager();
 auto mapmanager = GameManager::GetMapManager();
 
+SDL_Texture* globalTexture = NULL;
+
 /**
  * 
  * Initializes all hooks
@@ -93,8 +95,6 @@ SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int 
 }
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
-    GameManager::Render();
-    //logInfo("[SurfaceManager] Liczba tekstur: " + std::to_string(surfacemanager->Size()));
     return detour_RenderPresent->GetOriginalFunction()(renderer);
 }
 
@@ -115,16 +115,17 @@ int Hooks::SDL_UpperBlitScaled(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Su
 }
 
 int Hooks::SDL_RenderCopy(SDL_Renderer* renderer, SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect) {
-    //logInfo("[Hooks] SDL_RenderCopy");
-    //dog = 0;
+    GameManager::Render();
     return detour_RenderCopy->GetOriginalFunction()(renderer, texture, srcrect, dstrect);
 }
 
 int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const void* pixels, int pitch) {
     //logInfo("[Hooks] SDL_UpdateTexture"); //if your app fuck up here put dog.png next to pb
-    std::cout << texture << std::endl;
+    if(!globalTexture) {
+        globalTexture = texture;
+    }
+
     int returned_value = detour_UpdateTexture->GetOriginalFunction()(texture, rect, pixels, pitch);
-    Render::render(detour_UpdateTexture, texture);
     return returned_value;
 }
 
