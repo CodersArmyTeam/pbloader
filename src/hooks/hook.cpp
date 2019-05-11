@@ -29,6 +29,7 @@ auto surfacemanager = GameManager::GetSurfaceManager();
 auto mapmanager = GameManager::GetMapManager();
 
 SDL_Texture* globalTexture = NULL;
+SDL_Renderer* globalRenderer = NULL;
 
 /**
  * 
@@ -95,17 +96,14 @@ SDL_Window* Hooks::SDL_CreateWindow(const char *title, int x, int y, int w, int 
 }
 
 int Hooks::SDL_RenderPresent(SDL_Renderer *renderer) {
+    if(!globalRenderer) {
+        globalRenderer = renderer;
+    }
     return detour_RenderPresent->GetOriginalFunction()(renderer);
 }
 
 int Hooks::SDL_UpperBlit(SDL_Surface* src, const SDL_Rect* srcrect, SDL_Surface* dst, SDL_Rect* dstrect) {
     //logInfo("[PBLoader][Hooks] SDL_BlitSurface");
-
-    /*
-    std::string name = "GRAPH/" + std::to_string(dog) + ".bmp";
-    SDL_SaveBMP(dst, name.c_str());
-    dog += 1;
-     */
     return detour_UpperBlit->GetOriginalFunction()(src, srcrect, dst, dstrect);
 }
 
@@ -132,6 +130,8 @@ int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const v
 SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
     SDL_Surface* original_surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
     surfacemanager->Add(std::to_string(dog), original_surface);
+    std::string string = "ASSETS/" + std::to_string(dog) + ".png";
+    SDL_SaveBMP(original_surface, string.c_str());
     dog += 1;
     return original_surface;
 }

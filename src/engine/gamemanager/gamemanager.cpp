@@ -4,8 +4,13 @@ SurfaceManager* GameManager::surfacemanager = new SurfaceManager;
 MapManager* GameManager::mapmanager = new MapManager;
 
 Location* location = new Location;
+SDL_Surface* yyy = NULL;
+
+bool mhm = false;
 
 void GameManager::Init() {
+    yyy = IMG_Load("auuu.png");
+
     location->SetObstacle(31, 15, new Obstacle(1, true, true));
     location->SetObstacle(30, 15, new Obstacle(1, true, true));
     location->SetObstacle(29, 15, new Obstacle(1, true, true));
