@@ -10,6 +10,7 @@
 
 #include <hooks/typedefs.hpp>
 #include <detours/detours.h>
+#include <sol/sol.hpp>
 
 #include <engine/datamanager/datamanager.hpp>
 #include <engine/player/player.hpp>
