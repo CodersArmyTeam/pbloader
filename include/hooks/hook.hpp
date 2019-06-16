@@ -40,6 +40,8 @@ namespace Hooks {
     SDL_RWops* SDL_RWFromMem(void* mem, int size);
 
     void __thiscall location_is_changed(void* oh, unsigned int param_1);
+
+    void __fastcall aha(void* dst, char* unused, char* name);
 }
 
 #endif //PBLOADER_HOOK_HPP

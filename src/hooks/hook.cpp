@@ -22,6 +22,7 @@ MologieDetours::Detour<tMixPlayMusic>* detour_MixPlayMusic = NULL;
 
 MologieDetours::Detour<tTTFOpenFontRW>* detour_OpenFontRW = NULL;
 MologieDetours::Detour<tlocation_is_changed>* detour_location_is_changed = NULL;
+MologieDetours::Detour<taha>* detour_aha = NULL;
 
 int dog = 0;
 
@@ -61,6 +62,8 @@ bool Hooks::Init() {
         detour_UpdateTexture = new MologieDetours::Detour<tUpdateTexture>("SDL2.dll", "SDL_UpdateTexture", Hooks::SDL_UpdateTexture);
 
         detour_location_is_changed = new MologieDetours::Detour<tlocation_is_changed>((tlocation_is_changed)0x00403960, Hooks::location_is_changed);
+    
+        detour_aha = new MologieDetours::Detour<taha>((taha)0x00451D90, Hooks::aha);
     } catch(MologieDetours::DetourException& e) {
         logError("%s", e.what());
         return FALSE;
@@ -84,8 +87,19 @@ void Hooks::Clear() {
     delete detour_UpdateTexture;
 }
 
+void Hooks::aha(void* dst, char* unused, char* name) {
+    std::cout << "Hooks::aha name: " << name << std::endl;
+    detour_aha->GetOriginalFunction()(dst, unused, name);
+    return;
+}
+
+void Hooks::location_is_changed(void* oh, unsigned int param_1) {
+    detour_location_is_changed->GetOriginalFunction()(oh, param_1);
+    mapmanager->ModifyLocation();
+    return;
+}
+
 SDL_RWops* Hooks::SDL_RWFromMem(void* mem, int size) {
-    logInfo("Hooks::SDL_RWFromMemory is used!");
     SDL_RWops* rw = detour_RWFromMem->GetOriginalFunction()(mem, size);
     return rw;
 }
@@ -128,31 +142,16 @@ int Hooks::SDL_UpdateTexture(SDL_Texture* texture, const SDL_Rect* rect, const v
 }
 
 SDL_Surface* Hooks::IMG_Load_RW(SDL_RWops* src, int freesrc) {
-    SDL_Surface* original_surface = detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
-    surfacemanager->Add(std::to_string(dog), original_surface);
-    std::string string = "ASSETS/" + std::to_string(dog) + ".png";
-    SDL_SaveBMP(original_surface, string.c_str());
-    dog += 1;
-    return original_surface;
+    return detour_IMGLoadRW->GetOriginalFunction()(src, freesrc);
 }
 
 
 int Hooks::Mix_PlayMusic(Mix_Music* music, int loops) {
-    //logInfo("[Hooks] Mix_PlayMusic\n");
-    Mix_Music* changed_music = NULL;
-    changed_music = Mix_LoadMUS("downpour.wav");
-    return detour_MixPlayMusic->GetOriginalFunction()(changed_music, loops);
-    //return -1;
+    return detour_MixPlayMusic->GetOriginalFunction()(music, loops);
 }
 
 
 TTF_Font* Hooks::TTF_OpenFontRW(SDL_RWops* src, int freesrc, int ptsize) {
     TTF_Font* font = detour_OpenFontRW->GetOriginalFunction()(src, freesrc, ptsize);
     return font;
-}
-
-void Hooks::location_is_changed(void* oh, unsigned int param_1) {
-    detour_location_is_changed->GetOriginalFunction()(oh, param_1);
-    mapmanager->ModifyLocation();
-    return;
 }
